@@ -1,6 +1,8 @@
 <template>
     <div>
-      <canvas ref="pdfCanvas"></canvas>
+      <div v-for="pageNum in numPages" :key="pageNum">
+        <canvas :ref="setCanvasRef(pageNum)"></canvas>
+      </div>
     </div>
   </template>
   
@@ -12,19 +14,34 @@
     props: {
       pdfData: ArrayBuffer
     },
+    data() {
+      return {
+        numPages: 0,
+        canvasRefs: []
+      };
+    },
     watch: {
       pdfData: "renderPdf"
     },
     methods: {
+      setCanvasRef(pageNum) {
+        return (el) => {
+          this.canvasRefs[pageNum - 1] = el;
+        };
+      },
       async renderPdf() {
         const pdf = await pdfjsLib.getDocument(this.pdfData).promise;
-        const page = await pdf.getPage(1);
-        const viewport = page.getViewport({ scale: 1.5 });
-        const canvas = this.$refs.pdfCanvas;
-        const context = canvas.getContext("2d");
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        page.render({ canvasContext: context, viewport: viewport });
+        this.numPages = pdf.numPages;
+  
+        for (let pageNum = 1; pageNum <= this.numPages; pageNum++) {
+          const page = await pdf.getPage(pageNum);
+          const viewport = page.getViewport({ scale: 1.5 });
+          const canvas = this.canvasRefs[pageNum - 1];
+          const context = canvas.getContext("2d");
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          page.render({ canvasContext: context, viewport: viewport });
+        }
       }
     }
   };

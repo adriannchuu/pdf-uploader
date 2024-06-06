@@ -1,22 +1,19 @@
 <template>
-  <header>
-    <div class="wrapper">
-      <HelloWorld msg="PDF Viewer" />
+  <div id="app">
+    <div class="container">
+      <div class="left-side">
+        <PdfUploader @file-loaded="handleFileLoaded" />
+      </div>
+      <div class="right-side">
+        <PdfViewer v-if="pdfData" :pdfData="pdfData" />
+      </div>
     </div>
-  </header>
-  <main>
-    <div id="app">
-      <PdfUploader @file-loaded="handleFileLoaded" />
-      <PdfViewer v-if="pdfData" :pdfData="pdfData" />
-    </div>
-  </main>
-  
+  </div>
 </template>
 
 <script>
 import PdfUploader from "./components/PdfUploader.vue";
 import PdfViewer from "./components/PdfViewer.vue";
-
 
 export default {
   components: {
@@ -41,32 +38,27 @@ export default {
   text-align: center;
   margin-top: 50px;
 }
-</style>
-<style scoped>
-header {
-  line-height: 1.5;
+
+.container {
+  display: flex;
+  height: 100vh;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.left-side, .right-side {
+  flex: 1;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.left-side {
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.right-side {
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
