@@ -1,26 +1,72 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <header>
+    <div class="wrapper">
+      <HelloWorld msg="PDF Viewer" />
+    </div>
+  </header>
+  <main>
+    <div id="app">
+      <PdfUploader @file-loaded="handleFileLoaded" />
+      <PdfViewer v-if="pdfData" :pdfData="pdfData" />
+    </div>
+  </main>
+  
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import PdfUploader from "./components/PdfUploader.vue";
+import PdfViewer from "./components/PdfViewer.vue";
+
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    PdfUploader,
+    PdfViewer
+  },
+  data() {
+    return {
+      pdfData: null
+    };
+  },
+  methods: {
+    handleFileLoaded(data) {
+      this.pdfData = data;
+    }
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 50px;
+}
+</style>
+<style scoped>
+header {
+  line-height: 1.5;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  .logo {
+    margin: 0 2rem 0 0;
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
 }
 </style>
